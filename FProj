@@ -1,0 +1,264 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Finalproject {
+    private static Frame mainFrame;
+    private static Choice choiceNames;
+    private static Choice choiceGender;
+    private static Choice choiceHobbies;
+    private static TextField emailOrPhoneField;
+    private static TextField passwordField;
+    private static TextField confirmPasswordField;
+    private static Label warningLabel;
+
+    public static void main(String[] args) {
+        mainFrame = createMainFrame();
+        setupComponents(mainFrame);
+        setupWindowListener(mainFrame);
+        centerFrame(mainFrame);
+        mainFrame.setVisible(true);
+    }
+
+    private static Frame createMainFrame() {
+        Frame frame = new Frame();
+        frame.setBackground(Color.LIGHT_GRAY);
+        frame.setTitle("Member Login");
+        frame.setSize(640, 480);
+        return frame;
+    }
+
+    private static void setupComponents(Frame frame) {
+        Font titleFont = new Font("Arial", Font.BOLD, 50); 
+        Font regularFont = new Font("Arial", Font.PLAIN, 16); 
+
+        Label titleLabel = new Label("Project: Login");
+        titleLabel.setFont(titleFont);
+
+        Label label1 = new Label("Phone Number or Email:");
+        label1.setFont(regularFont);
+        Label label2 = new Label("Password:");
+        label2.setFont(regularFont);
+        Label label3 = new Label("Confirm Password:");
+        label3.setFont(regularFont);
+        Label label4 = new Label("Member Name:");
+        label4.setFont(regularFont);
+        Label label5 = new Label("Gender:");
+        label5.setFont(regularFont);
+        Label label6 = new Label("Hobbies:");
+        label6.setFont(regularFont);
+        warningLabel = new Label();
+
+        emailOrPhoneField = new TextField();
+        passwordField = new TextField();
+        confirmPasswordField = new TextField();
+        confirmPasswordField.setEchoChar('*');
+        passwordField.setEchoChar('*');
+        choiceNames = new Choice();
+        choiceGender = new Choice();
+        choiceHobbies = new Choice();
+
+        setupTextFields(emailOrPhoneField, passwordField, confirmPasswordField);
+        setupChoices(choiceNames, choiceGender, choiceHobbies);
+
+        frame.setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+       
+        addComponent(frame, new Label(""), gbc, 0, 0, 2, 1); 
+        addComponent(frame, new Label(""), gbc, 0, 1, 2, 1); 
+        
+        gbc.gridwidth = 2; 
+        gbc.anchor = GridBagConstraints.PAGE_START; 
+        addComponent(frame, titleLabel, gbc, 0, 2);
+
+        gbc.gridwidth = 1; 
+
+        addComponent(frame, label1, gbc, 0, 3);
+        addComponent(frame, emailOrPhoneField, gbc, 1, 3);
+        addComponent(frame, label2, gbc, 0, 4);
+        addComponent(frame, passwordField, gbc, 1, 4);
+        addComponent(frame, label3, gbc, 0, 5);
+        addComponent(frame, confirmPasswordField, gbc, 1, 5);
+        addComponent(frame, label4, gbc, 0, 6);
+        addComponent(frame, choiceNames, gbc, 1, 6);
+        addComponent(frame, label5, gbc, 0, 7);
+        addComponent(frame, choiceGender, gbc, 1, 7);
+        addComponent(frame, label6, gbc, 0, 8);
+        addComponent(frame, choiceHobbies, gbc, 1, 8);
+        addComponent(frame, warningLabel, gbc, 0, 9, 2, 1);
+
+        Button loginButton = new Button("Login");
+        loginButton.setPreferredSize(new Dimension(100, 30)); 
+        setupLoginButtonAction(loginButton, emailOrPhoneField, passwordField, confirmPasswordField, frame);
+        addComponent(frame, loginButton, gbc, 1, 10);
+    }
+ 
+    private static void setupTextFields(TextField emailOrPhoneField, TextField passwordField, TextField confirmPasswordField) {
+        emailOrPhoneField.setPreferredSize(new Dimension(290, 25));
+        passwordField.setPreferredSize(new Dimension(290, 25));
+        confirmPasswordField.setPreferredSize(new Dimension(290, 25));
+    }
+
+    private static void setupChoices(Choice choiceNames, Choice choiceGender, Choice choiceHobbies) {
+        choiceNames.add("Adriel Macalindong");
+        choiceNames.add("Mark Tolin");
+        choiceNames.add("Harold Molar");
+
+        choiceGender.add("Male");
+        choiceGender.add("Female");
+        choiceGender.add("Preferred not to say");
+
+        choiceHobbies.add("Taekwondo");
+        choiceHobbies.add("Guitar");
+        choiceHobbies.add("Basketball");
+    }
+
+    private static void setupLoginButtonAction(Button loginButton, TextField emailOrPhoneField, TextField passwordField, TextField confirmPasswordField, Frame frame) {
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String emailOrPhone = emailOrPhoneField.getText();
+                String password = passwordField.getText();
+                String confirmPassword = confirmPasswordField.getText();
+                String memberName = choiceNames.getSelectedItem();
+                String gender = choiceGender.getSelectedItem();
+                String hobbies = choiceHobbies.getSelectedItem();
+                
+                warningLabel.setText("");
+                emailOrPhoneField.setForeground(Color.BLACK);
+                passwordField.setForeground(Color.BLACK);
+                confirmPasswordField.setForeground(Color.BLACK);
+
+                boolean isValid = true;
+                
+                if (emailOrPhone.isEmpty()) {
+                    warningLabel.setText("Phone number or email is required.");
+                    warningLabel.setForeground(Color.RED);
+                    emailOrPhoneField.setForeground(Color.RED);
+                    isValid = false;
+                }
+                
+                if (password.isEmpty()) {
+                    warningLabel.setText("Password is required.");
+                    warningLabel.setForeground(Color.RED);
+                    passwordField.setForeground(Color.RED);
+                    isValid = false;
+                }
+                
+                if (confirmPassword.isEmpty()) {
+                    warningLabel.setText("Confirm Password is required.");
+                    warningLabel.setForeground(Color.RED);
+                    confirmPasswordField.setForeground(Color.RED);
+                    isValid = false;
+                } else if (!password.equals(confirmPassword)) {
+                    warningLabel.setText("Passwords do not match. Please try again.");
+                    warningLabel.setForeground(Color.RED);
+                    confirmPasswordField.setForeground(Color.RED);
+                    isValid = false;
+                }
+                
+                if (isValid) {
+                    showPopupFrame(emailOrPhone, password, memberName, gender, hobbies, frame);
+                }
+            }
+        });
+    }
+
+    private static void showPopupFrame(String emailOrPhone, String password, String memberName, String gender, String hobbies, Frame frame) {
+        Font largerFont = new Font("Arial", Font.PLAIN, 16);
+        Frame popupFrame = new Frame("Login Details");
+        popupFrame.setBackground(Color.WHITE);
+
+        Label detailsLabel1 = new Label("Email or Phone: " + emailOrPhone);
+        detailsLabel1.setFont(largerFont);
+        String maskedPassword = maskPassword(password);
+        Label detailsLabel2 = new Label("Password: " + maskedPassword);
+        detailsLabel2.setFont(largerFont);
+        Label detailsLabel3 = new Label("Member Name: " + memberName);
+        detailsLabel3.setFont(largerFont);
+        Label detailsLabel4 = new Label("Gender: " + gender);
+        detailsLabel4.setFont(largerFont);
+        Label detailsLabel5 = new Label("Hobbies: " + hobbies);
+        detailsLabel5.setFont(largerFont);
+        Label successLabel = new Label("Login Successfully");
+        successLabel.setFont(largerFont);
+        successLabel.setForeground(Color.GREEN);
+
+        Panel detailsPanel = new Panel(new GridLayout(6, 1));
+        detailsPanel.add(detailsLabel1);
+        detailsPanel.add(detailsLabel2);
+        detailsPanel.add(detailsLabel3);
+        detailsPanel.add(detailsLabel4);
+        detailsPanel.add(detailsLabel5);
+        detailsPanel.add(successLabel);
+        popupFrame.add(detailsPanel);
+
+        ImageIcon successImageIcon = new ImageIcon("C:\\Users\\Adriel\\Downloads\\images (1).png"); // Replace with your image file path
+        JLabel imageLabel = new JLabel(successImageIcon);
+        popupFrame.add(imageLabel, BorderLayout.NORTH);
+
+        int popupWidth = 300;
+        int popupHeight = 400; 
+        popupFrame.setSize(popupWidth, popupHeight);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int xLocation = (screenSize.width - popupWidth) / 2;
+        int yLocation = (screenSize.height - popupHeight) / 2;
+        popupFrame.setLocation(xLocation, yLocation);
+
+        popupFrame.setVisible(true);
+
+        Timer timer = new Timer(4000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                popupFrame.dispose();
+                frame.dispose();
+            }
+        });
+        timer.setRepeats(false);
+        timer.start();
+    }
+
+    private static void setupWindowListener(Frame frame) {
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                System.exit(0);
+            }
+        });
+    }
+
+    private static void centerFrame(Frame frame) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int xLocation = (screenSize.width - frame.getWidth()) / 2;
+        int yLocation = (screenSize.height - frame.getHeight()) / 2;
+        frame.setLocation(xLocation, yLocation);
+    }
+
+    private static String maskPassword(String password) {
+        if (password.length() <= 2) {
+            return password.replaceAll(".", "*");
+        } else {
+            return password.charAt(0) + password.substring(1, password.length() - 1).replaceAll(".", "*") + password.charAt(password.length() - 1);
+        }
+    }
+
+    private static void addComponent(Container container, Component component, GridBagConstraints gbc, int x, int y) {
+        gbc.gridx = x;
+        gbc.gridy = y;
+        container.add(component, gbc);
+    }
+
+    private static void addComponent(Container container, Component component, GridBagConstraints gbc, int x, int y, int width, int height) {
+        gbc.gridx = x;
+        gbc.gridy = y;
+        gbc.gridwidth = width;
+        gbc.gridheight = height;
+        container.add(component, gbc);
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+    }
+}
