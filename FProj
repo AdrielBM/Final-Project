@@ -106,6 +106,7 @@ public class Finalproject {
         choiceNames.add("Adriel Macalindong");
         choiceNames.add("Mark Tolin");
         choiceNames.add("Harold Molar");
+        choiceNames.add("Francis Jacoba");
 
         choiceGender.add("Male");
         choiceGender.add("Female");
@@ -114,6 +115,7 @@ public class Finalproject {
         choiceHobbies.add("Taekwondo");
         choiceHobbies.add("Guitar");
         choiceHobbies.add("Basketball");
+        choiceHobbies.add("Billiards");
     }
 
     private static void setupLoginButtonAction(Button loginButton, TextField emailOrPhoneField, TextField passwordField, TextField confirmPasswordField, Frame frame) {
